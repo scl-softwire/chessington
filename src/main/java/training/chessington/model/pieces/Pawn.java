@@ -15,6 +15,10 @@ public class Pawn extends AbstractPiece {
 
     @Override
     public List<Move> getAllowedMoves(Coordinates from, Board board) {
-        return new ArrayList<>();
+        List<Move> allowedMoves = new ArrayList<>();
+        int offset = colour == PlayerColour.WHITE ? -1 : 1;
+        allowedMoves.add(new Move(from, from.plus(offset, 0)));
+
+        return allowedMoves;
     }
 }
