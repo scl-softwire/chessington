@@ -20,13 +20,13 @@ public class Pawn extends AbstractPiece {
 
         // Move forward one square
         Coordinates onceInFront = from.plus(offset, 0);
-        if (board.squareIsEmpty(onceInFront)) {
+        if (board.inBounds(onceInFront) && board.squareIsEmpty(onceInFront)) {
             allowedMoves.add(new Move(from, from.plus(offset, 0)));
         }
 
         // Move forward two squares
         Coordinates twiceInFront = from.plus(2 * offset, 0);
-        if (onStartingSquare(from) && board.squareIsEmpty(onceInFront) && board.squareIsEmpty(twiceInFront)) {
+        if (onStartingSquare(from) && board.inBounds(twiceInFront) && board.squareIsEmpty(onceInFront) && board.squareIsEmpty(twiceInFront)) {
             allowedMoves.add(new Move(from, from.plus(2 * offset, 0)));
         }
 

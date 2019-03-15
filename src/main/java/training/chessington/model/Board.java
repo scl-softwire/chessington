@@ -50,6 +50,10 @@ public class Board {
         board[coords.getRow()][coords.getCol()] = piece;
     }
 
+    public boolean inBounds(Coordinates coords) {
+        return coords.getRow() >= 0 && coords.getRow() < 8 && coords.getCol() >= 0 && coords.getCol() < 8;
+    }
+
     public boolean squareIsEmpty(Coordinates coords) {
         return get(coords) == null;
     }
