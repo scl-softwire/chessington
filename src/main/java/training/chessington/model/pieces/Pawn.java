@@ -19,10 +19,14 @@ public class Pawn extends AbstractPiece {
         int offset = colour == PlayerColour.WHITE ? -1 : 1;
 
         // Move forward one square
-        allowedMoves.add(new Move(from, from.plus(offset, 0)));
+        Coordinates onceInFront = from.plus(offset, 0);
+        if (board.squareIsEmpty(onceInFront)) {
+            allowedMoves.add(new Move(from, from.plus(offset, 0)));
+        }
 
         // Move forward two squares
-        if (onStartingSquare(from)) {
+        Coordinates twiceInFront = from.plus(2 * offset, 0);
+        if (onStartingSquare(from) && board.squareIsEmpty(onceInFront) && board.squareIsEmpty(twiceInFront)) {
             allowedMoves.add(new Move(from, from.plus(2 * offset, 0)));
         }
 
