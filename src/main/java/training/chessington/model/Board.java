@@ -57,4 +57,9 @@ public class Board {
     public boolean squareIsEmpty(Coordinates coords) {
         return get(coords) == null;
     }
+
+    public boolean squareContainsPieceOfColour(Coordinates coords, PlayerColour colour) {
+        Piece piece = get(coords);
+        return piece != null && piece.getColour() == colour;
+    }
 }

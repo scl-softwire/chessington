@@ -6,7 +6,9 @@ import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Pawn extends AbstractPiece {
     public Pawn(PlayerColour colour) {
@@ -29,6 +31,11 @@ public class Pawn extends AbstractPiece {
         if (onStartingSquare(from) && board.inBounds(twiceInFront) && board.squareIsEmpty(onceInFront) && board.squareIsEmpty(twiceInFront)) {
             allowedMoves.add(new Move(from, from.plus(2 * offset, 0)));
         }
+
+        // Captures
+        Stream.of(new Move(from, from.plus(offset, 1)), new Move(from, from.plus(offset, -1)))
+                .filter(move -> board.inBounds(move.getTo()) && containsEnemy(board, move.getTo()))
+                .forEach(allowedMoves::add);
 
         return allowedMoves;
     }
