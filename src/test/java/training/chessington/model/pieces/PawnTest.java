@@ -314,10 +314,8 @@ public class PawnTest {
         Coordinates blackCoordinates = new Coordinates(1, 3);
         board.placePiece(blackCoordinates, blackPawn);
 
-        Flags flags = Flags.forNewGame();
-        flags.setNextPlayer(PlayerColour.BLACK);
-
-        Game game = new Game(board, flags);
+        Game game = new Game(board, Flags.forNewGame());
+        game.getGameInfo().setNextPlayer(PlayerColour.BLACK);
         game.makeMove(new Move(blackCoordinates, blackCoordinates.plus(2, 0)));
 
         // Act
@@ -340,10 +338,7 @@ public class PawnTest {
         Coordinates blackCoordinates = new Coordinates(4, 3);
         board.placePiece(blackCoordinates, blackPawn);
 
-        Flags flags = Flags.forNewGame();
-        flags.setNextPlayer(PlayerColour.WHITE);
-
-        Game game = new Game(board, flags);
+        Game game = new Game(board, Flags.forNewGame());
         game.makeMove(new Move(whiteCoordinates, whiteCoordinates.plus(-2, 0)));
 
         // Act
@@ -366,10 +361,7 @@ public class PawnTest {
         Coordinates blackCoordinates = new Coordinates(3, 3);
         board.placePiece(blackCoordinates, blackPawn);
 
-        Flags flags = Flags.forNewGame();
-        flags.setNextPlayer(PlayerColour.WHITE);
-
-        Game game = new Game(board, flags);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Act
         List<Move> whiteMoves = whitePawn.getAllowedMoves(whiteCoordinates, game);
@@ -391,10 +383,7 @@ public class PawnTest {
         Coordinates blackCoordinates = new Coordinates(4, 3);
         board.placePiece(blackCoordinates, blackPawn);
 
-        Flags flags = Flags.forNewGame();
-        flags.setNextPlayer(PlayerColour.WHITE);
-
-        Game game = new Game(board, flags);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Act
         List<Move> blackMoves = blackPawn.getAllowedMoves(blackCoordinates, game);

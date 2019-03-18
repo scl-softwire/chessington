@@ -27,10 +27,8 @@ public class GameTest {
         Coordinates blackCoordinates = new Coordinates(1, 3);
         board.placePiece(blackCoordinates, blackPawn);
 
-        Flags flags = Flags.forNewGame();
-        flags.setNextPlayer(PlayerColour.BLACK);
-
-        Game game = new Game(board, flags);
+        Game game = new Game(board, Flags.forNewGame());
+        game.getGameInfo().setNextPlayer(PlayerColour.BLACK);
         game.makeMove(new Move(blackCoordinates, blackCoordinates.plus(2, 0)));
 
         // Act
@@ -54,10 +52,7 @@ public class GameTest {
         Coordinates blackCoordinates = new Coordinates(4, 3);
         board.placePiece(blackCoordinates, blackPawn);
 
-        Flags flags = Flags.forNewGame();
-        flags.setNextPlayer(PlayerColour.WHITE);
-
-        Game game = new Game(board, flags);
+        Game game = new Game(board, Flags.forNewGame());
         game.makeMove(new Move(whiteCoordinates, whiteCoordinates.plus(-2, 0)));
 
         // Act
@@ -106,7 +101,7 @@ public class GameTest {
         board.obliterate(new Coordinates(0, 5));
         board.obliterate(new Coordinates(0, 6));
         Game game = new Game(board, Flags.forNewGame());
-        game.getFlags().setNextPlayer(PlayerColour.BLACK);
+        game.getGameInfo().setNextPlayer(PlayerColour.BLACK);
 
         // Act
         game.makeMove(new Move(new Coordinates(0, 4), new Coordinates(0, 6)));
@@ -123,7 +118,7 @@ public class GameTest {
         board.obliterate(new Coordinates(0, 2));
         board.obliterate(new Coordinates(0, 3));
         Game game = new Game(board, Flags.forNewGame());
-        game.getFlags().setNextPlayer(PlayerColour.BLACK);
+        game.getGameInfo().setNextPlayer(PlayerColour.BLACK);
 
         // Act
         game.makeMove(new Move(new Coordinates(0, 4), new Coordinates(0, 2)));

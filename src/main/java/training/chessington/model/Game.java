@@ -10,11 +10,13 @@ import java.util.stream.Collectors;
 public class Game {
     public static final int SIZE = 8;
     private final Board board;
-    private Flags flags;
+    private final Flags flags;
+    private final GameInfo gameInfo;
 
     public Game(Board board, Flags flags) {
         this.board = board;
         this.flags = flags;
+        this.gameInfo = GameInfo.forNewGame();
     }
 
     public static Game newGame() {
@@ -31,17 +33,21 @@ public class Game {
         return flags;
     }
 
+    public GameInfo getGameInfo() {
+        return gameInfo;
+    }
+
     public Piece pieceAt(int row, int col) {
         return board.get(new Coordinates(row, col));
     }
 
     public List<Move> getAllowedMoves(Coordinates from) {
-        if (flags.isGameOver()) {
+        if (gameInfo.isGameOver()) {
             return new ArrayList<>();
         }
 
         Piece piece = board.get(from);
-        if (piece == null || piece.getColour() != flags.getNextPlayer()) {
+        if (piece == null || piece.getColour() != gameInfo.getNextPlayer()) {
             return new ArrayList<>();
         }
 
@@ -50,7 +56,7 @@ public class Game {
     }
 
     private boolean moveWouldNotLeavePlayerInCheck(Move move) {
-        PlayerColour thisPlayer = flags.getNextPlayer();
+        PlayerColour thisPlayer = gameInfo.getNextPlayer();
         PlayerColour otherPlayer = thisPlayer.opponent();
 
         Game alternateGame = new Game(board.createCopy(), flags.createCopy());
@@ -60,7 +66,7 @@ public class Game {
     }
 
     public void makeMove(Move move) throws InvalidMoveException {
-        if (flags.isGameOver()) {
+        if (gameInfo.isGameOver()) {
             throw new InvalidMoveException("Game has ended!");
         }
 
@@ -72,8 +78,8 @@ public class Game {
             throw new InvalidMoveException(String.format("No piece at %s", from));
         }
 
-        if (piece.getColour() != flags.getNextPlayer()) {
-            throw new InvalidMoveException(String.format("Wrong colour piece - it is %s's turn", flags.getNextPlayer()));
+        if (piece.getColour() != gameInfo.getNextPlayer()) {
+            throw new InvalidMoveException(String.format("Wrong colour piece - it is %s's turn", gameInfo.getNextPlayer()));
         }
 
         if (!getAllowedMoves(move.getFrom()).contains(move)) {
@@ -84,6 +90,18 @@ public class Game {
         checkForEnPassantCapture(piece, to);
         checkForCastling(piece, from, to);
         updateFlags(piece, from, to);
+    }
+
+    public void promotePiece(Piece.PieceType pieceType) {
+        Coordinates promotionSquare = flags.getPawnPromotionSquare().get();
+        PlayerColour colour = board.get(promotionSquare).getColour();
+        switch (pieceType) {
+            case QUEEN: board.placePiece(promotionSquare, new Queen(colour)); break;
+            case ROOK: board.placePiece(promotionSquare, new Rook(colour)); break;
+            case BISHOP: board.placePiece(promotionSquare, new Bishop(colour)); break;
+            case KNIGHT: board.placePiece(promotionSquare, new Knight(colour)); break;
+        }
+        flags.setPawnPromotionSquare(Optional.empty());
     }
 
     private void updateFlags(Piece piece, Coordinates from, Coordinates to) {
@@ -113,23 +131,27 @@ public class Game {
             }
         }
 
+        // Pawn promotion
+        if (piece.getType() == Piece.PieceType.PAWN && (to.getRow() == 0 || to.getRow() == 7)) {
+            flags.setPawnPromotionSquare(Optional.of(to));
+        }
+
         // Next player
-        flags.switchPlayer();
+        gameInfo.switchPlayer();
 
         // Game over
         if (hasNoLegalMoves()) {
-            flags.setGameOver(true);
-            flags.setResult(isInCheck() ? winResult() : Result.DRAW);
+            gameInfo.setResult(isInCheck() ? winResult() : Result.DRAW);
         }
     }
 
     private Result winResult() {
-        return flags.getNextPlayer() == PlayerColour.WHITE ? Result.BLACK_WINS : Result.WHITE_WINS;
+        return gameInfo.getNextPlayer() == PlayerColour.WHITE ? Result.BLACK_WINS : Result.WHITE_WINS;
     }
 
     private boolean isInCheck() {
-        Coordinates kingPosition = board.findKingOfColour(flags.getNextPlayer());
-        return kingPosition != null && squareIsThreatenedByColour(kingPosition, flags.getNextPlayer().opponent());
+        Coordinates kingPosition = board.findKingOfColour(gameInfo.getNextPlayer());
+        return kingPosition != null && squareIsThreatenedByColour(kingPosition, gameInfo.getNextPlayer().opponent());
     }
 
     private boolean hasNoLegalMoves() {
@@ -178,10 +200,10 @@ public class Game {
     }
 
     public boolean isEnded() {
-        return flags.isGameOver();
+        return gameInfo.isGameOver();
     }
 
     public String getResult() {
-        return flags.getResult().name();
+        return gameInfo.getResult().name();
     }
 }

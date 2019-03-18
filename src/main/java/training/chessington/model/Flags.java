@@ -1,7 +1,5 @@
 package training.chessington.model;
 
-import training.chessington.model.pieces.Result;
-
 import java.util.Optional;
 
 public class Flags {
@@ -11,9 +9,7 @@ public class Flags {
     private boolean blackKingsideCastle;
     private boolean blackQueensideCastle;
     private Optional<Coordinates> enPassantSquare;
-    private boolean gameOver;
-    private Result result;
-    private PlayerColour nextPlayer;
+    private Optional<Coordinates> pawnPromotionSquare;
 
     public static Flags forNewGame() {
         Flags flags = new Flags();
@@ -22,9 +18,7 @@ public class Flags {
         flags.blackKingsideCastle = true;
         flags.blackQueensideCastle = true;
         flags.enPassantSquare = Optional.empty();
-        flags.gameOver = false;
-        flags.result = Result.IN_PROGRESS;
-        flags.nextPlayer = PlayerColour.WHITE;
+        flags.pawnPromotionSquare = Optional.empty();
         return flags;
     }
 
@@ -43,9 +37,6 @@ public class Flags {
         flags.blackKingsideCastle = blackKingsideCastle;
         flags.blackQueensideCastle = blackQueensideCastle;
         flags.enPassantSquare = enPassantSquare;
-        flags.gameOver = gameOver;
-        flags.result = result;
-        flags.nextPlayer = nextPlayer;
         return flags;
     }
 
@@ -53,56 +44,20 @@ public class Flags {
         return enPassantSquare;
     }
 
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
-    public PlayerColour getNextPlayer() {
-        return nextPlayer;
-    }
-
     public void setEnPassantSquare(Optional<Coordinates> enPassantSquare) {
         this.enPassantSquare = enPassantSquare;
-    }
-
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
-    }
-
-    public void setNextPlayer(PlayerColour nextPlayer) {
-        this.nextPlayer = nextPlayer;
-    }
-
-    public void switchPlayer() {
-        nextPlayer = nextPlayer.opponent();
-    }
-
-    public boolean isWhiteKingsideCastle() {
-        return whiteKingsideCastle;
     }
 
     public void setWhiteKingsideCastle(boolean whiteKingsideCastle) {
         this.whiteKingsideCastle = whiteKingsideCastle;
     }
 
-    public boolean isWhiteQueensideCastle() {
-        return whiteQueensideCastle;
-    }
-
     public void setWhiteQueensideCastle(boolean whiteQueensideCastle) {
         this.whiteQueensideCastle = whiteQueensideCastle;
     }
 
-    public boolean isBlackKingsideCastle() {
-        return blackKingsideCastle;
-    }
-
     public void setBlackKingsideCastle(boolean blackKingsideCastle) {
         this.blackKingsideCastle = blackKingsideCastle;
-    }
-
-    public boolean isBlackQueensideCastle() {
-        return blackQueensideCastle;
     }
 
     public void setBlackQueensideCastle(boolean blackQueensideCastle) {
@@ -111,8 +66,12 @@ public class Flags {
 
     public void forbidCastling(PlayerColour colour) {
         switch (colour) {
-            case WHITE: whiteQueensideCastle = whiteKingsideCastle = false; break;
-            case BLACK: blackQueensideCastle = blackKingsideCastle = false; break;
+            case WHITE:
+                whiteQueensideCastle = whiteKingsideCastle = false;
+                break;
+            case BLACK:
+                blackQueensideCastle = blackKingsideCastle = false;
+                break;
         }
     }
 
@@ -124,11 +83,11 @@ public class Flags {
         return colour == PlayerColour.WHITE ? whiteQueensideCastle : blackQueensideCastle;
     }
 
-    public Result getResult() {
-        return result;
+    public Optional<Coordinates> getPawnPromotionSquare() {
+        return pawnPromotionSquare;
     }
 
-    public void setResult(Result result) {
-        this.result = result;
+    public void setPawnPromotionSquare(Optional<Coordinates> pawnPromotionSquare) {
+        this.pawnPromotionSquare = pawnPromotionSquare;
     }
 }
