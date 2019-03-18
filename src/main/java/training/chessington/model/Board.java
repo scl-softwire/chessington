@@ -51,7 +51,7 @@ public class Board {
     }
 
     public boolean inBounds(Coordinates coords) {
-        return coords.getRow() >= 0 && coords.getRow() < 8 && coords.getCol() >= 0 && coords.getCol() < 8;
+        return coords.getRow() >= 0 && coords.getRow() < Game.SIZE && coords.getCol() >= 0 && coords.getCol() < Game.SIZE;
     }
 
     public boolean squareIsEmpty(Coordinates coords) {

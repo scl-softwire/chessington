@@ -2,6 +2,7 @@ package training.chessington.model.pieces;
 
 import training.chessington.model.Board;
 import training.chessington.model.Coordinates;
+import training.chessington.model.Game;
 import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
@@ -40,7 +41,7 @@ public class Pawn extends AbstractPiece {
     }
 
     private boolean onStartingSquare(Coordinates currentSquare) {
-        int startingRow = colour == PlayerColour.WHITE ? 6 : 1;
+        int startingRow = colour == PlayerColour.WHITE ? Game.SIZE - 2 : 1;
         return currentSquare.getRow() == startingRow;
     }
 }
