@@ -91,7 +91,7 @@ public class RookTest {
         Coordinates rookCoordinates = new Coordinates(2, 5);
         board.placePiece(rookCoordinates, rook);
 
-        // Place an enemy in range of the rook
+        // Place an ally in range of the rook
         Piece friendlyPiece = new Pawn(PlayerColour.WHITE);
         Coordinates friendlyCoordinates = new Coordinates(2, 7);
         board.placePiece(friendlyCoordinates, friendlyPiece);
@@ -111,7 +111,7 @@ public class RookTest {
         Coordinates rookCoordinates = new Coordinates(2, 5);
         board.placePiece(rookCoordinates, rook);
 
-        // Place an enemy in range of the rook
+        // Place an ally in range of the rook
         Piece friendlyPiece = new Pawn(PlayerColour.WHITE);
         Coordinates friendlyCoordinates = new Coordinates(2, 2);
         board.placePiece(friendlyCoordinates, friendlyPiece);
