@@ -1,7 +1,7 @@
 package training.chessington.model.pieces;
 
-import training.chessington.model.Board;
 import training.chessington.model.Coordinates;
+import training.chessington.model.Game;
 import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
@@ -15,5 +15,5 @@ public interface Piece {
     PieceType getType();
     PlayerColour getColour();
 
-    List<Move> getAllowedMoves(Coordinates from, Board board);
+    List<Move> getAllowedMoves(Coordinates from, Game game);
 }

@@ -44,7 +44,7 @@ public abstract class AbstractPiece implements Piece {
         return !board.squareIsEmpty(coords) && !board.squareContainsPieceOfColour(coords, colour);
     }
 
-    protected List<Move> longRangeMovesInDirection(Board board, Coordinates start, int rowDelta, int colDelta) {
+    private List<Move> longRangeMovesInDirection(Board board, Coordinates start, int rowDelta, int colDelta) {
         List<Move> allowedMoves = new ArrayList<>();
         for (int i = 1; i < Game.SIZE; i++) {
             Move candidateMove = new Move(start, start.plus(rowDelta * i, colDelta * i));
@@ -59,5 +59,23 @@ public abstract class AbstractPiece implements Piece {
             }
         }
         return allowedMoves;
+    }
+
+    protected List<Move> getOrthogonalMoves(Board board, Coordinates start) {
+        return new ArrayList<Move>(){{
+            addAll(longRangeMovesInDirection(board, start, 1, 0));
+            addAll(longRangeMovesInDirection(board, start, 0, 1));
+            addAll(longRangeMovesInDirection(board, start, -1, 0));
+            addAll(longRangeMovesInDirection(board, start, 0, -1));
+        }};
+    }
+
+    protected List<Move> getDiagonalMoves(Board board, Coordinates start) {
+        return new ArrayList<Move>(){{
+            addAll(longRangeMovesInDirection(board, start, 1, 1));
+            addAll(longRangeMovesInDirection(board, start, 1, -1));
+            addAll(longRangeMovesInDirection(board, start, -1, 1));
+            addAll(longRangeMovesInDirection(board, start, -1, -1));
+        }};
     }
 }

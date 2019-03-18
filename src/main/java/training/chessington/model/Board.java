@@ -41,6 +41,10 @@ public class Board {
         return board[coords.getRow()][coords.getCol()];
     }
 
+    public void obliterate(Coordinates coords) {
+        board[coords.getRow()][coords.getCol()] = null;
+    }
+
     public void move(Coordinates from, Coordinates to) {
         board[to.getRow()][to.getCol()] = board[from.getRow()][from.getCol()];
         board[from.getRow()][from.getCol()] = null;

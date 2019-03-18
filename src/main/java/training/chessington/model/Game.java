@@ -4,17 +4,30 @@ import training.chessington.model.pieces.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Game {
     public static final int SIZE = 8;
     private final Board board;
+    private Flags flags;
 
-    private PlayerColour nextPlayer = PlayerColour.WHITE;
-
-    private boolean isEnded = false;
-
-    public Game(Board board) {
+    public Game(Board board, Flags flags) {
         this.board = board;
+        this.flags = flags;
+    }
+
+    public static Game newGame() {
+        Board board = Board.forNewGame();
+        Flags flags = Flags.forNewGame();
+        return new Game(board, flags);
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public Flags getFlags() {
+        return flags;
     }
 
     public Piece pieceAt(int row, int col) {
@@ -22,20 +35,20 @@ public class Game {
     }
 
     public List<Move> getAllowedMoves(Coordinates from) {
-        if (isEnded) {
+        if (flags.isGameOver()) {
             return new ArrayList<>();
         }
 
         Piece piece = board.get(from);
-        if (piece == null || piece.getColour() != nextPlayer) {
+        if (piece == null || piece.getColour() != flags.getNextPlayer()) {
             return new ArrayList<>();
         }
 
-        return piece.getAllowedMoves(from, board);
+        return piece.getAllowedMoves(from, this);
     }
 
     public void makeMove(Move move) throws InvalidMoveException {
-        if (isEnded) {
+        if (flags.isGameOver()) {
             throw new InvalidMoveException("Game has ended!");
         }
 
@@ -47,20 +60,44 @@ public class Game {
             throw new InvalidMoveException(String.format("No piece at %s", from));
         }
 
-        if (piece.getColour() != nextPlayer) {
-            throw new InvalidMoveException(String.format("Wrong colour piece - it is %s's turn", nextPlayer));
+        if (piece.getColour() != flags.getNextPlayer()) {
+            throw new InvalidMoveException(String.format("Wrong colour piece - it is %s's turn", flags.getNextPlayer()));
         }
 
-        if (!piece.getAllowedMoves(move.getFrom(), board).contains(move)) {
+        if (!getAllowedMoves(move.getFrom()).contains(move)) {
             throw new InvalidMoveException(String.format("Cannot move piece %s from %s to %s", piece, from, to));
         }
 
         board.move(from, to);
-        nextPlayer = nextPlayer == PlayerColour.WHITE ? PlayerColour.BLACK : PlayerColour.WHITE;
+        checkForEnPassantCapture(piece, to);
+        updateFlags(piece, from, to);
+    }
+
+    private void updateFlags(Piece piece, Coordinates from, Coordinates to) {
+
+        // En passant
+        if (piece.getType() == Piece.PieceType.PAWN && Math.abs(to.getRow() - from.getRow()) == 2) {
+            Coordinates inBetween = piece.getColour() == PlayerColour.WHITE ? from.plus(-1, 0) : from.plus(1, 0);
+            flags.setEnPassantSquare(Optional.of(inBetween));
+        } else {
+            flags.setEnPassantSquare(Optional.empty());
+        }
+
+        // Next player
+        flags.switchPlayer();
+    }
+
+    private void checkForEnPassantCapture(Piece piece, Coordinates to) {
+        if (piece.getType() == Piece.PieceType.PAWN) {
+            if (flags.getEnPassantSquare().isPresent() && flags.getEnPassantSquare().get().equals(to)) {
+                int offset = piece.getColour() == PlayerColour.WHITE ? 1 : -1;
+                board.obliterate(flags.getEnPassantSquare().get().plus(offset, 0));
+            }
+        }
     }
 
     public boolean isEnded() {
-        return isEnded;
+        return flags.isGameOver();
     }
 
     public String getResult() {

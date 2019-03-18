@@ -1,11 +1,10 @@
 package training.chessington.model.pieces;
 
-import training.chessington.model.Board;
 import training.chessington.model.Coordinates;
+import training.chessington.model.Game;
 import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +15,7 @@ public class King extends AbstractPiece {
     }
 
     @Override
-    public List<Move> getAllowedMoves(Coordinates from, Board board) {
+    public List<Move> getAllowedMoves(Coordinates from, Game game) {
         List<Coordinates> potentialDestinations = Arrays.asList(
                 from.plus(-1, -1), from.plus(-1, 0), from.plus(-1, 1),
                 from.plus(0, -1), from.plus(0, 1),
@@ -24,8 +23,8 @@ public class King extends AbstractPiece {
         );
 
         return potentialDestinations.stream()
-                .filter(board::inBounds)
-                .filter(to -> !board.squareContainsPieceOfColour(to, colour))
+                .filter(game.getBoard()::inBounds)
+                .filter(to -> !game.getBoard().squareContainsPieceOfColour(to, colour))
                 .map(to -> new Move(from, to))
                 .collect(Collectors.toList());
     }

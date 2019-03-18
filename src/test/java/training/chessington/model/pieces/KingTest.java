@@ -3,6 +3,8 @@ package training.chessington.model.pieces;
 import org.junit.Test;
 import training.chessington.model.Board;
 import training.chessington.model.Coordinates;
+import training.chessington.model.Flags;
+import training.chessington.model.Game;
 import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
@@ -20,9 +22,10 @@ public class KingTest {
         Piece king = new King(PlayerColour.WHITE);
         Coordinates kingCoordinates = new Coordinates(5, 2);
         board.placePiece(kingCoordinates, king);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Act
-        List<Move> kingMoves = king.getAllowedMoves(kingCoordinates, board);
+        List<Move> kingMoves = king.getAllowedMoves(kingCoordinates, game);
 
         // Assert
         assertThat(kingMoves).containsOnly(
@@ -44,6 +47,7 @@ public class KingTest {
         Piece king = new King(PlayerColour.WHITE);
         Coordinates kingCoordinates = new Coordinates(5, 2);
         board.placePiece(kingCoordinates, king);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Put a friendly piece in range of the king
         Piece friendlyPiece = new Pawn(PlayerColour.WHITE);
@@ -51,7 +55,7 @@ public class KingTest {
         board.placePiece(friendlyCoordinates, friendlyPiece);
 
         // Act
-        List<Move> kingMoves = king.getAllowedMoves(kingCoordinates, board);
+        List<Move> kingMoves = king.getAllowedMoves(kingCoordinates, game);
 
         // Assert
         assertThat(kingMoves).doesNotContain(new Move(kingCoordinates, friendlyCoordinates));
@@ -64,6 +68,7 @@ public class KingTest {
         Piece king = new King(PlayerColour.WHITE);
         Coordinates kingCoordinates = new Coordinates(5, 2);
         board.placePiece(kingCoordinates, king);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Put an enemy piece in range of the king
         Piece enemyPiece = new Pawn(PlayerColour.BLACK);
@@ -71,7 +76,7 @@ public class KingTest {
         board.placePiece(enemyCoordinates, enemyPiece);
 
         // Act
-        List<Move> kingMoves = king.getAllowedMoves(kingCoordinates, board);
+        List<Move> kingMoves = king.getAllowedMoves(kingCoordinates, game);
 
         // Assert
         assertThat(kingMoves).contains(new Move(kingCoordinates, enemyCoordinates));

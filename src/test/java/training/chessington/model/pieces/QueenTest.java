@@ -3,6 +3,8 @@ package training.chessington.model.pieces;
 import org.junit.Test;
 import training.chessington.model.Board;
 import training.chessington.model.Coordinates;
+import training.chessington.model.Flags;
+import training.chessington.model.Game;
 import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
@@ -20,9 +22,10 @@ public class QueenTest {
         Piece queen = new Queen(PlayerColour.WHITE);
         Coordinates queenCoordinates = new Coordinates(4, 4);
         board.placePiece(queenCoordinates, queen);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Act
-        List<Move> moves = queen.getAllowedMoves(queenCoordinates, board);
+        List<Move> moves = queen.getAllowedMoves(queenCoordinates, game);
 
         // Assert
         assertThat(moves).containsOnly(
@@ -63,6 +66,7 @@ public class QueenTest {
         Piece queen = new Queen(PlayerColour.WHITE);
         Coordinates queenCoordinates = new Coordinates(4, 4);
         board.placePiece(queenCoordinates, queen);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Place an enemy in range of the queen
         Piece enemyPiece = new Pawn(PlayerColour.BLACK);
@@ -70,7 +74,7 @@ public class QueenTest {
         board.placePiece(enemyCoordinates, enemyPiece);
 
         // Act
-        List<Move> moves = queen.getAllowedMoves(queenCoordinates, board);
+        List<Move> moves = queen.getAllowedMoves(queenCoordinates, game);
 
         // Assert
         assertThat(moves).contains(new Move(queenCoordinates, enemyCoordinates));
@@ -83,6 +87,7 @@ public class QueenTest {
         Piece queen = new Queen(PlayerColour.WHITE);
         Coordinates queenCoordinates = new Coordinates(4, 4);
         board.placePiece(queenCoordinates, queen);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Place an enemy in range of the queen
         Piece enemyPiece = new Pawn(PlayerColour.BLACK);
@@ -90,7 +95,7 @@ public class QueenTest {
         board.placePiece(enemyCoordinates, enemyPiece);
 
         // Act
-        List<Move> moves = queen.getAllowedMoves(queenCoordinates, board);
+        List<Move> moves = queen.getAllowedMoves(queenCoordinates, game);
 
         // Assert
         assertThat(moves).doesNotContain(new Move(queenCoordinates, new Coordinates(7, 1)));
@@ -103,6 +108,7 @@ public class QueenTest {
         Piece queen = new Queen(PlayerColour.WHITE);
         Coordinates queenCoordinates = new Coordinates(4, 4);
         board.placePiece(queenCoordinates, queen);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Place an ally in range of the queen
         Piece friendlyPiece = new Pawn(PlayerColour.WHITE);
@@ -110,7 +116,7 @@ public class QueenTest {
         board.placePiece(friendlyCoordinates, friendlyPiece);
 
         // Act
-        List<Move> moves = queen.getAllowedMoves(queenCoordinates, board);
+        List<Move> moves = queen.getAllowedMoves(queenCoordinates, game);
 
         // Assert
         assertThat(moves).doesNotContain(new Move(queenCoordinates, friendlyCoordinates));
@@ -123,6 +129,7 @@ public class QueenTest {
         Piece queen = new Queen(PlayerColour.WHITE);
         Coordinates queenCoordinates = new Coordinates(4, 4);
         board.placePiece(queenCoordinates, queen);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Place an ally in range of the queen
         Piece friendlyPiece = new Pawn(PlayerColour.WHITE);
@@ -130,7 +137,7 @@ public class QueenTest {
         board.placePiece(friendlyCoordinates, friendlyPiece);
 
         // Act
-        List<Move> moves = queen.getAllowedMoves(queenCoordinates, board);
+        List<Move> moves = queen.getAllowedMoves(queenCoordinates, game);
 
         // Assert
         assertThat(moves).doesNotContain(new Move(queenCoordinates, new Coordinates(4, 7)));

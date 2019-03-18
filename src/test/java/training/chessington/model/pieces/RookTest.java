@@ -3,6 +3,8 @@ package training.chessington.model.pieces;
 import org.junit.Test;
 import training.chessington.model.Board;
 import training.chessington.model.Coordinates;
+import training.chessington.model.Flags;
+import training.chessington.model.Game;
 import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
@@ -20,9 +22,10 @@ public class RookTest {
         Piece rook  = new Rook(PlayerColour.WHITE);
         Coordinates rookCoordinates = new Coordinates(2, 5);
         board.placePiece(rookCoordinates, rook);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Act
-        List<Move> moves = rook.getAllowedMoves(rookCoordinates, board);
+        List<Move> moves = rook.getAllowedMoves(rookCoordinates, game);
 
         // Assert
         assertThat(moves).containsOnly(
@@ -50,6 +53,7 @@ public class RookTest {
         Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates rookCoordinates = new Coordinates(2, 5);
         board.placePiece(rookCoordinates, rook);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Place an enemy in range of the rook
         Piece enemyPiece = new Pawn(PlayerColour.BLACK);
@@ -57,7 +61,7 @@ public class RookTest {
         board.placePiece(enemyCoordinates, enemyPiece);
 
         // Act
-        List<Move> moves = rook.getAllowedMoves(rookCoordinates, board);
+        List<Move> moves = rook.getAllowedMoves(rookCoordinates, game);
 
         // Assert
         assertThat(moves).contains(new Move(rookCoordinates, enemyCoordinates));
@@ -70,6 +74,7 @@ public class RookTest {
         Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates rookCoordinates = new Coordinates(2, 5);
         board.placePiece(rookCoordinates, rook);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Place an enemy in range of the rook
         Piece enemyPiece = new Pawn(PlayerColour.BLACK);
@@ -77,7 +82,7 @@ public class RookTest {
         board.placePiece(enemyCoordinates, enemyPiece);
 
         // Act
-        List<Move> moves = rook.getAllowedMoves(rookCoordinates, board);
+        List<Move> moves = rook.getAllowedMoves(rookCoordinates, game);
 
         // Assert
         assertThat(moves).doesNotContain(new Move(rookCoordinates, new Coordinates(0, 5)));
@@ -90,6 +95,7 @@ public class RookTest {
         Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates rookCoordinates = new Coordinates(2, 5);
         board.placePiece(rookCoordinates, rook);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Place an ally in range of the rook
         Piece friendlyPiece = new Pawn(PlayerColour.WHITE);
@@ -97,7 +103,7 @@ public class RookTest {
         board.placePiece(friendlyCoordinates, friendlyPiece);
 
         // Act
-        List<Move> moves = rook.getAllowedMoves(rookCoordinates, board);
+        List<Move> moves = rook.getAllowedMoves(rookCoordinates, game);
 
         // Assert
         assertThat(moves).doesNotContain(new Move(rookCoordinates, friendlyCoordinates));
@@ -110,6 +116,7 @@ public class RookTest {
         Piece rook = new Rook(PlayerColour.WHITE);
         Coordinates rookCoordinates = new Coordinates(2, 5);
         board.placePiece(rookCoordinates, rook);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Place an ally in range of the rook
         Piece friendlyPiece = new Pawn(PlayerColour.WHITE);
@@ -117,7 +124,7 @@ public class RookTest {
         board.placePiece(friendlyCoordinates, friendlyPiece);
 
         // Act
-        List<Move> moves = rook.getAllowedMoves(rookCoordinates, board);
+        List<Move> moves = rook.getAllowedMoves(rookCoordinates, game);
 
         // Assert
         assertThat(moves).doesNotContain(new Move(rookCoordinates, new Coordinates(2, 1)));

@@ -13,8 +13,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Board board = Board.forNewGame();
-        Game game = new Game(board);
+        Game game = Game.newGame();
         Parent chessBoard = new ChessApp(game);
         primaryStage.setTitle("Chessington");
         Scene scene = new Scene(new Group());

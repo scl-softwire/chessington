@@ -3,6 +3,8 @@ package training.chessington.model.pieces;
 import org.junit.Test;
 import training.chessington.model.Board;
 import training.chessington.model.Coordinates;
+import training.chessington.model.Flags;
+import training.chessington.model.Game;
 import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
@@ -20,9 +22,10 @@ public class BishopTest {
         Piece bishop = new Bishop(PlayerColour.WHITE);
         Coordinates bishopCoordinates = new Coordinates(3, 5);
         board.placePiece(bishopCoordinates, bishop);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Act
-        List<Move> moves = bishop.getAllowedMoves(bishopCoordinates, board);
+        List<Move> moves = bishop.getAllowedMoves(bishopCoordinates, game);
 
         // Assert
         assertThat(moves).containsOnly(
@@ -47,6 +50,7 @@ public class BishopTest {
         Piece bishop = new Bishop(PlayerColour.WHITE);
         Coordinates bishopCoordinates = new Coordinates(3, 5);
         board.placePiece(bishopCoordinates, bishop);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Place an enemy in range of the bishop
         Piece enemyPiece = new Pawn(PlayerColour.BLACK);
@@ -54,7 +58,7 @@ public class BishopTest {
         board.placePiece(enemyCoordinates, enemyPiece);
 
         // Act
-        List<Move> moves = bishop.getAllowedMoves(bishopCoordinates, board);
+        List<Move> moves = bishop.getAllowedMoves(bishopCoordinates, game);
 
         // Assert
         assertThat(moves).contains(new Move(bishopCoordinates, enemyCoordinates));
@@ -67,6 +71,7 @@ public class BishopTest {
         Piece bishop = new Bishop(PlayerColour.WHITE);
         Coordinates bishopCoordinates = new Coordinates(3, 5);
         board.placePiece(bishopCoordinates, bishop);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Place an enemy in range of the bishop
         Piece enemyPiece = new Pawn(PlayerColour.BLACK);
@@ -74,7 +79,7 @@ public class BishopTest {
         board.placePiece(enemyCoordinates, enemyPiece);
 
         // Act
-        List<Move> moves = bishop.getAllowedMoves(bishopCoordinates, board);
+        List<Move> moves = bishop.getAllowedMoves(bishopCoordinates, game);
 
         // Assert
         assertThat(moves).doesNotContain(new Move(bishopCoordinates, new Coordinates(1, 3)));
@@ -87,6 +92,7 @@ public class BishopTest {
         Piece bishop = new Bishop(PlayerColour.WHITE);
         Coordinates bishopCoordinates = new Coordinates(3, 5);
         board.placePiece(bishopCoordinates, bishop);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Place an ally in range of the bishop
         Piece friendlyPiece = new Pawn(PlayerColour.WHITE);
@@ -94,7 +100,7 @@ public class BishopTest {
         board.placePiece(friendlyCoordinates, friendlyPiece);
 
         // Act
-        List<Move> moves = bishop.getAllowedMoves(bishopCoordinates, board);
+        List<Move> moves = bishop.getAllowedMoves(bishopCoordinates, game);
 
         // Assert
         assertThat(moves).doesNotContain(new Move(bishopCoordinates, friendlyCoordinates));
@@ -107,6 +113,7 @@ public class BishopTest {
         Piece bishop = new Bishop(PlayerColour.WHITE);
         Coordinates bishopCoordinates = new Coordinates(3, 5);
         board.placePiece(bishopCoordinates, bishop);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Place an ally in range of the bishop
         Piece friendlyPiece = new Pawn(PlayerColour.WHITE);
@@ -114,7 +121,7 @@ public class BishopTest {
         board.placePiece(friendlyCoordinates, friendlyPiece);
 
         // Act
-        List<Move> moves = bishop.getAllowedMoves(bishopCoordinates, board);
+        List<Move> moves = bishop.getAllowedMoves(bishopCoordinates, game);
 
         // Assert
         assertThat(moves).doesNotContain(new Move(bishopCoordinates, new Coordinates(5, 7)));

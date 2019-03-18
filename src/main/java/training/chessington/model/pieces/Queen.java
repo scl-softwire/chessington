@@ -1,7 +1,7 @@
 package training.chessington.model.pieces;
 
-import training.chessington.model.Board;
 import training.chessington.model.Coordinates;
+import training.chessington.model.Game;
 import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
@@ -14,16 +14,10 @@ public class Queen extends AbstractPiece {
     }
 
     @Override
-    public List<Move> getAllowedMoves(Coordinates from, Board board) {
+    public List<Move> getAllowedMoves(Coordinates from, Game game) {
         return new ArrayList<Move>(){{
-            addAll(longRangeMovesInDirection(board, from, 1, 0));
-            addAll(longRangeMovesInDirection(board, from, 0, 1));
-            addAll(longRangeMovesInDirection(board, from, -1, 0));
-            addAll(longRangeMovesInDirection(board, from, 0, -1));
-            addAll(longRangeMovesInDirection(board, from, 1, 1));
-            addAll(longRangeMovesInDirection(board, from, 1, -1));
-            addAll(longRangeMovesInDirection(board, from, -1, 1));
-            addAll(longRangeMovesInDirection(board, from, -1, -1));
+            addAll(getOrthogonalMoves(game.getBoard(), from));
+            addAll(getDiagonalMoves(game.getBoard(), from));
         }};
     }
 }

@@ -3,6 +3,8 @@ package training.chessington.model.pieces;
 import org.junit.Test;
 import training.chessington.model.Board;
 import training.chessington.model.Coordinates;
+import training.chessington.model.Flags;
+import training.chessington.model.Game;
 import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
@@ -20,9 +22,10 @@ public class KnightTest {
         Piece knight = new Knight(PlayerColour.WHITE);
         Coordinates knightCoordinates = new Coordinates(3, 5);
         board.placePiece(knightCoordinates, knight);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Act
-        List<Move> knightMoves = knight.getAllowedMoves(knightCoordinates, board);
+        List<Move> knightMoves = knight.getAllowedMoves(knightCoordinates, game);
 
         // Assert
         assertThat(knightMoves).containsOnly(
@@ -44,6 +47,7 @@ public class KnightTest {
         Piece knight = new Knight(PlayerColour.WHITE);
         Coordinates knightCoordinates = new Coordinates(3, 5);
         board.placePiece(knightCoordinates, knight);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Put pieces surrounding the knight
         for (int i = -1; i <= 1; i++) {
@@ -55,7 +59,7 @@ public class KnightTest {
         }
 
         // Act
-        List<Move> knightMoves = knight.getAllowedMoves(knightCoordinates, board);
+        List<Move> knightMoves = knight.getAllowedMoves(knightCoordinates, game);
 
         // Assert
         assertThat(knightMoves).containsOnly(
@@ -77,6 +81,7 @@ public class KnightTest {
         Piece knight = new Knight(PlayerColour.WHITE);
         Coordinates knightCoordinates = new Coordinates(3, 5);
         board.placePiece(knightCoordinates, knight);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Put a friendly piece in range of the knight
         Piece friendlyPiece = new Pawn(PlayerColour.WHITE);
@@ -84,7 +89,7 @@ public class KnightTest {
         board.placePiece(friendlyCoordinates, friendlyPiece);
 
         // Act
-        List<Move> knightMoves = knight.getAllowedMoves(knightCoordinates, board);
+        List<Move> knightMoves = knight.getAllowedMoves(knightCoordinates, game);
 
         // Assert
         assertThat(knightMoves).doesNotContain(new Move(knightCoordinates, friendlyCoordinates));
@@ -97,6 +102,7 @@ public class KnightTest {
         Piece knight = new Knight(PlayerColour.WHITE);
         Coordinates knightCoordinates = new Coordinates(3, 5);
         board.placePiece(knightCoordinates, knight);
+        Game game = new Game(board, Flags.forNewGame());
 
         // Put an enemy piece in range of the knight
         Piece enemyPiece = new Pawn(PlayerColour.BLACK);
@@ -104,7 +110,7 @@ public class KnightTest {
         board.placePiece(enemyCoordinates, enemyPiece);
 
         // Act
-        List<Move> knightMoves = knight.getAllowedMoves(knightCoordinates, board);
+        List<Move> knightMoves = knight.getAllowedMoves(knightCoordinates, game);
 
         // Assert
         assertThat(knightMoves).contains(new Move(knightCoordinates, enemyCoordinates));
