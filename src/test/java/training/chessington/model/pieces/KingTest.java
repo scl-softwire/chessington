@@ -22,7 +22,7 @@ public class KingTest {
         Piece king = new King(PlayerColour.WHITE);
         Coordinates kingCoordinates = new Coordinates(5, 2);
         board.placePiece(kingCoordinates, king);
-        Game game = new Game(board, Flags.forNewGame());
+        Game game = new Game(board, Flags.forNewGame().withNoSpecialMoves());
 
         // Act
         List<Move> kingMoves = king.getAllowedMoves(kingCoordinates, game);
@@ -80,5 +80,125 @@ public class KingTest {
 
         // Assert
         assertThat(kingMoves).contains(new Move(kingCoordinates, enemyCoordinates));
+    }
+
+    @Test
+    public void whiteCanCastleKingside() {
+        // Arrange
+        Board board = Board.forNewGame();
+        Coordinates kingCoordinates = new Coordinates(7, 4);
+        board.obliterate(new Coordinates(7, 5));
+        board.obliterate(new Coordinates(7, 6));
+        Game game = new Game(board, Flags.forNewGame());
+
+        // Act
+        List<Move> moves = board.get(kingCoordinates).getAllowedMoves(kingCoordinates, game);
+
+        // Assert
+        assertThat(moves).contains(new Move(kingCoordinates, kingCoordinates.plus(0, 2)));
+    }
+
+    @Test
+    public void whiteCanCastleQueenside() {
+        // Arrange
+        Board board = Board.forNewGame();
+        Coordinates kingCoordinates = new Coordinates(7, 4);
+        board.obliterate(new Coordinates(7, 1));
+        board.obliterate(new Coordinates(7, 2));
+        board.obliterate(new Coordinates(7, 3));
+        Game game = new Game(board, Flags.forNewGame());
+
+        // Act
+        List<Move> moves = board.get(kingCoordinates).getAllowedMoves(kingCoordinates, game);
+
+        // Assert
+        assertThat(moves).contains(new Move(kingCoordinates, kingCoordinates.plus(0, -2)));
+    }
+
+    @Test
+    public void blackCanCastleKingside() {
+        // Arrange
+        Board board = Board.forNewGame();
+        Coordinates kingCoordinates = new Coordinates(0, 4);
+        board.obliterate(new Coordinates(0, 5));
+        board.obliterate(new Coordinates(0, 6));
+        Game game = new Game(board, Flags.forNewGame());
+
+        // Act
+        List<Move> moves = board.get(kingCoordinates).getAllowedMoves(kingCoordinates, game);
+
+        // Assert
+        assertThat(moves).contains(new Move(kingCoordinates, kingCoordinates.plus(0, 2)));
+    }
+
+    @Test
+    public void blackCanCastleQueenside() {
+        // Arrange
+        Board board = Board.forNewGame();
+        Coordinates kingCoordinates = new Coordinates(0, 4);
+        board.obliterate(new Coordinates(0, 1));
+        board.obliterate(new Coordinates(0, 2));
+        board.obliterate(new Coordinates(0, 3));
+        Game game = new Game(board, Flags.forNewGame());
+
+        // Act
+        List<Move> moves = board.get(kingCoordinates).getAllowedMoves(kingCoordinates, game);
+
+        // Assert
+        assertThat(moves).contains(new Move(kingCoordinates, kingCoordinates.plus(0, -2)));
+    }
+
+    @Test
+    public void cannotCastleOutOfCheck() {
+        // Arrange
+        Board board = Board.forNewGame();
+        Coordinates kingCoordinates = new Coordinates(7, 4);
+        board.obliterate(new Coordinates(7, 5));
+        board.obliterate(new Coordinates(7, 6));
+        Game game = new Game(board, Flags.forNewGame());
+
+        // Put the King in check
+        board.placePiece(new Coordinates(6, 4), new Rook(PlayerColour.BLACK));
+
+        // Act
+        List<Move> moves = board.get(kingCoordinates).getAllowedMoves(kingCoordinates, game);
+
+        // Assert
+        assertThat(moves).doesNotContain(new Move(kingCoordinates, kingCoordinates.plus(0, 2)));
+    }
+
+    @Test
+    public void cannotCastleThroughCheck() {
+        // Arrange
+        Board board = Board.forNewGame();
+        Coordinates kingCoordinates = new Coordinates(7, 4);
+        board.obliterate(new Coordinates(7, 5));
+        board.obliterate(new Coordinates(7, 6));
+        Game game = new Game(board, Flags.forNewGame());
+
+        // Put a piece attacking an intermediate square
+        board.obliterate(new Coordinates(6, 5));
+        board.placePiece(new Coordinates(3, 5), new Rook(PlayerColour.BLACK));
+
+        // Act
+        List<Move> moves = board.get(kingCoordinates).getAllowedMoves(kingCoordinates, game);
+
+        // Assert
+        assertThat(moves).doesNotContain(new Move(kingCoordinates, kingCoordinates.plus(0, 2)));
+    }
+
+    @Test
+    public void cannotCastleThroughObstructingPieces() {
+        // Arrange
+        Board board = Board.forNewGame();
+        Coordinates kingCoordinates = new Coordinates(7, 4);
+        board.obliterate(new Coordinates(7, 6));
+        Game game = new Game(board, Flags.forNewGame());
+
+        // Act
+        List<Move> moves = board.get(kingCoordinates).getAllowedMoves(kingCoordinates, game);
+
+        // Assert
+        assertThat(moves).doesNotContain(new Move(kingCoordinates, kingCoordinates.plus(0, 2)));
     }
 }

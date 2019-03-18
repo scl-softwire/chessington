@@ -5,9 +5,7 @@ import training.chessington.model.Game;
 import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Knight extends AbstractPiece {
     public Knight(PlayerColour colour) {
@@ -16,17 +14,11 @@ public class Knight extends AbstractPiece {
 
     @Override
     public List<Move> getAllowedMoves(Coordinates from, Game game) {
-        List<Coordinates> potentialDestinations = Arrays.asList(
+       return createValidMoves(game, from,
                 from.plus(1, 2), from.plus(2, 1),
                 from.plus(1, -2), from.plus(-2, 1),
                 from.plus(-1, 2), from.plus(2, -1),
                 from.plus(-1, -2), from.plus(-2, -1)
         );
-
-        return potentialDestinations.stream()
-                .filter(game.getBoard()::inBounds)
-                .filter(to -> !game.getBoard().squareContainsPieceOfColour(to, colour))
-                .map(to -> new Move(from, to))
-                .collect(Collectors.toList());
     }
 }

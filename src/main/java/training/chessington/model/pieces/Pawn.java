@@ -48,7 +48,6 @@ public class Pawn extends AbstractPiece {
         if (!game.getBoard().inBounds(move.getTo())) {
             return false;
         }
-        return containsEnemy(game.getBoard(), move.getTo()) ||
-                (game.getFlags().getEnPassantSquare().isPresent() && game.getFlags().getEnPassantSquare().get().equals(move.getTo()));
+        return containsEnemy(game.getBoard(), move.getTo()) || game.getFlags().getEnPassantSquare().map(move.getTo()::equals).orElse(false);
     }
 }

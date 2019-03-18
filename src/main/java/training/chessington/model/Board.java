@@ -9,6 +9,16 @@ public class Board {
     private Board() {
     }
 
+    public Board createCopy() {
+        Board copyOfBoard = new Board();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                copyOfBoard.board[i][j] = this.board[i][j];
+            }
+        }
+        return copyOfBoard;
+    }
+
     public static Board forNewGame() {
         Board board = new Board();
         board.setBackRow(0, PlayerColour.BLACK);
@@ -65,5 +75,17 @@ public class Board {
     public boolean squareContainsPieceOfColour(Coordinates coords, PlayerColour colour) {
         Piece piece = get(coords);
         return piece != null && piece.getColour() == colour;
+    }
+
+    public Coordinates findKingOfColour(PlayerColour colour) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                Piece piece = board[i][j];
+                if (piece != null && piece.getType() == Piece.PieceType.KING && piece.getColour() == colour) {
+                    return new Coordinates(i, j);
+                }
+            }
+        }
+        return null;
     }
 }

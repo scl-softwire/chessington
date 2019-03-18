@@ -7,7 +7,9 @@ import training.chessington.model.Move;
 import training.chessington.model.PlayerColour;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -77,5 +79,13 @@ public abstract class AbstractPiece implements Piece {
             addAll(longRangeMovesInDirection(board, start, -1, 1));
             addAll(longRangeMovesInDirection(board, start, -1, -1));
         }};
+    }
+
+    protected List<Move> createValidMoves(Game game, Coordinates from, Coordinates ...toCoords) {
+        return Arrays.stream(toCoords)
+                .filter(game.getBoard()::inBounds)
+                .filter(to -> !game.getBoard().squareContainsPieceOfColour(to, colour))
+                .map(to -> new Move(from, to))
+                .collect(Collectors.toList());
     }
 }
