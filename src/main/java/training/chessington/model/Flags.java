@@ -4,28 +4,16 @@ import java.util.Optional;
 
 public class Flags {
 
-    private boolean whiteCastle;
-    private boolean blackCastle;
     private Optional<Coordinates> enPassantSquare;
     private boolean gameOver;
     private PlayerColour nextPlayer;
 
     public static Flags forNewGame() {
         Flags flags = new Flags();
-        flags.whiteCastle = true;
-        flags.blackCastle = true;
         flags.enPassantSquare = Optional.empty();
         flags.gameOver = false;
         flags.nextPlayer = PlayerColour.WHITE;
         return flags;
-    }
-
-    public boolean isWhiteCastle() {
-        return whiteCastle;
-    }
-
-    public boolean isBlackCastle() {
-        return blackCastle;
     }
 
     public Optional<Coordinates> getEnPassantSquare() {
@@ -38,14 +26,6 @@ public class Flags {
 
     public PlayerColour getNextPlayer() {
         return nextPlayer;
-    }
-
-    public void setWhiteCastle(boolean whiteCastle) {
-        this.whiteCastle = whiteCastle;
-    }
-
-    public void setBlackCastle(boolean blackCastle) {
-        this.blackCastle = blackCastle;
     }
 
     public void setEnPassantSquare(Optional<Coordinates> enPassantSquare) {
